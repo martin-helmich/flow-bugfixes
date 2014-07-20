@@ -1207,6 +1207,9 @@ class ReflectionService {
 		} else {
 			$className = ($classNameOrObject[0] === '\\' ? substr($classNameOrObject, 1) : $classNameOrObject);
 		}
+		if (in_array('Doctrine\ORM\Proxy\Proxy', class_implements($className)) && strpos($className, '__CG__') !== FALSE) {
+			$className = get_parent_class($className);
+		}
 		if (!isset($this->classSchemata[$className])) {
 			$this->classSchemata[$className] = $this->classSchemataRuntimeCache->get(str_replace('\\', '_', $className));
 		}

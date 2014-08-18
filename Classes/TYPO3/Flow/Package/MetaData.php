@@ -161,7 +161,7 @@ class MetaData implements \TYPO3\Flow\Package\MetaDataInterface {
 	}
 
 	/**
-	 * @return Array of TYPO3\Flow\Package\MetaData\AbstractParty The package parties
+	 * @return \TYPO3\Flow\Package\MetaData\AbstractParty[] The package parties
 	 */
 	public function getParties() {
 		return $this->parties;

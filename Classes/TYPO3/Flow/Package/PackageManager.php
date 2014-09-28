@@ -495,6 +495,22 @@ class PackageManager implements \TYPO3\Flow\Package\PackageManagerInterface {
 					}
 				}
 			}
+			if (count($packageMetaData->getParties())) {
+				$manifest['authors'] = array();
+				foreach ($packageMetaData->getParties() as $party) {
+					$author = array(
+						'name' => $party->getName(),
+						'role' => $party->getRole()
+					);
+					if ($party->getEmail()) {
+						$author['email'] = $party->getEmail();
+					}
+					if ($party->getWebsite()) {
+						$author['homepage'] = $party->getWebsite();
+					}
+					$manifest['authors'][] = $author;
+				}
+			}
 		} else {
 			$manifest['type'] = 'typo3-flow-package';
 			$manifest['description'] = '';

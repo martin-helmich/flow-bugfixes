@@ -11,6 +11,7 @@ namespace TYPO3\Flow\Tests\Unit\Package;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\Flow\Package\MetaData\Person;
 use TYPO3\Flow\Package\PackageInterface;
 use org\bovigo\vfs\vfsStream;
 
@@ -334,6 +335,25 @@ class PackageManagerTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$composerManifest = json_decode($json);
 
 		$this->assertEquals('flow-custom-package', $composerManifest->type);
+	}
+
+	/**
+	 * @test
+	 */
+	public function createPackageCanSetAuthorsInComposerManifest() {
+		$metaData = new \TYPO3\Flow\Package\MetaData('Acme.YetAnotherTestPackage2');
+		$metaData->setDescription('Yet Another Test Package');
+		$metaData->addParty(new Person('Developer', 'Foo McBar', 'f.bar@acme.com', 'acme.com', 'Acme Inc.'));
+
+		$package = $this->packageManager->createPackage('Acme.YetAnotherTestPackage2', $metaData);
+
+		$json = file_get_contents($package->getPackagePath() . '/composer.json');
+		$composerManifest = json_decode($json, TRUE);
+
+		$this->assertEquals(
+			array(array('role' => 'Developer', 'email' => 'f.bar@acme.com', 'homepage' => 'acme.com', 'name' => 'Foo McBar')),
+			$composerManifest['authors']
+		);
 	}
 
 	/**
